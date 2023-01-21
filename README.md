@@ -29,8 +29,9 @@ $ conda install cookiecutter
 ### To start a new project, run:
 ------------
 
-    cookiecutter -c v1 https://github.com/JoseJuan98/cookiecutter-data-science
+    cookiecutter https://github.com/JoseJuan98/cookiecutter-data-science
 
+For the future, if another repo version would be needed, it can use `cookiecutter -c <tag>` for using other tagged branches.
 
 [![asciicast](https://asciinema.org/a/244658.svg)](https://asciinema.org/a/244658)
 
