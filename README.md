@@ -2,13 +2,16 @@
 
 _A logical, reasonably standardized, but flexible project structure for doing and sharing data science work._
 
+Original code provided by [drivendata](https://drivendata.github.io/cookiecutter-data-science/)
+
+Modified under the License of MIT
 
 #### [Project homepage](http://drivendata.github.io/cookiecutter-data-science/)
 
 
 ### Requirements to use the cookiecutter template:
 -----------
- - Python 2.7 or 3.5+
+ - Python 3.7+
  - [Cookiecutter Python package](http://cookiecutter.readthedocs.org/en/latest/installation.html) >= 1.4.0: This can be installed with pip by or conda depending on how you manage your Python packages:
 
 ``` bash
@@ -26,7 +29,7 @@ $ conda install cookiecutter
 ### To start a new project, run:
 ------------
 
-    cookiecutter -c v1 https://github.com/drivendata/cookiecutter-data-science
+    cookiecutter -c v1 https://github.com/JoseJuan98/cookiecutter-data-science
 
 
 [![asciicast](https://asciinema.org/a/244658.svg)](https://asciinema.org/a/244658)
