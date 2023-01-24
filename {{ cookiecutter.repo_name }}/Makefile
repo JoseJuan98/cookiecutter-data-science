@@ -1,4 +1,4 @@
-.PHONY: clean data lint requirements update_requirements
+.PHONY: clean data lint requirements update_requirements environment
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -7,24 +7,28 @@
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PROJECT_NAME = {{ cookiecutter.repo_name }}
 PYTHON_INTERPRETER = {{ cookiecutter.python_interpreter }}
-
-ifeq (,$(shell which conda))
-HAS_CONDA=False
-else
-HAS_CONDA=True
-endif
+PACKAGE_MANAGER = {{ cookiecutter.package_manager }}
+PYTHON_VERSION = {{ cookiecutter.python_version }}
 
 #################################################################################
 # COMMANDS                                                                      #
 #################################################################################
 
+# In case a command need args
+args = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
+
+# to use args
+# $(call args, <default_value>)
+
 ## Install Python Dependencies
-requirements: test_environment
+requirements:
+	source ./venv/bin/activate
 	$(PYTHON_INTERPRETER) -m pip install --no-cache-dir -U pip setuptools wheel build
 	$(PYTHON_INTERPRETER) -m pip install --no-cache-dir -r requirements.txt
 
 ## Update Python Dependencies
 update_requirements: requirements
+	source ./venv/bin/activate
 	$(PYTHON_INTERPRETER) -m pip install --no-cache-dir -U -r requirements.txt
 
 ## Make Dataset
@@ -38,30 +42,31 @@ clean:
 
 ## Lint using flake8
 lint:
-	flake8 src, tests
+	flake8 src test
 
-## Set up python interpreter environment
-create_environment:
-ifeq (True,$(HAS_CONDA))
-		@echo ">>> Detected conda, creating conda environment."
-ifeq (3,$(findstring 3,$(PYTHON_INTERPRETER)))
-	conda create --name $(PROJECT_NAME) python=3
+## Create python virtual environment
+environment:
+ifneq (,$(wildcard ./venv))
+	@echo The virtual environment has been already created;
 else
-	conda create --name $(PROJECT_NAME) python=2.7
-endif
-		@echo ">>> New conda env created. Activate with:\nsource activate $(PROJECT_NAME)"
+ifeq ($(PACKAGE_MANAGER),"conda")
+	@echo ">>> Detected conda, creating conda environment."
+	$(PACKAGE_MANAGER) create --name $(PROJECT_NAME) python=$(PYTHON_VERSION)
+	@echo ">>> New conda env created. Activate with:\nsource activate $(PROJECT_NAME)"
 else
-	$(PYTHON_INTERPRETER) -m pip install -q virtualenv virtualenvwrapper
-	@echo ">>> Installing virtualenvwrapper if not already installed.\nMake sure the following lines are in shell startup file\n\
-	export WORKON_HOME=$$HOME/.virtualenvs\nexport PROJECT_HOME=$$HOME/Devel\nsource /usr/local/bin/virtualenvwrapper.sh\n"
-	@bash -c "source `which virtualenvwrapper.sh`;mkvirtualenv $(PROJECT_NAME) --python=$(PYTHON_INTERPRETER)"
-	@echo ">>> New virtualenv created. Activate with:\nworkon $(PROJECT_NAME)"
+	@echo Creating venv venv;
+	python$(PYTHON_VERSION) -m pip install virtualenv;
+	python$(PYTHON_VERSION) -m virtualenv venv;
 endif
 
-## Test python environment is setup correctly
-test_environment:
-	$(PYTHON_INTERPRETER) test_environment.py
-
+## Clean virtual environment
+clean_environment:
+ifneq (,$(wildcard ./venv))
+	deactivate || echo "Already venv deactivated";
+	rm -r venv;
+else
+	@echo It has been cleaned already
+endif
 #################################################################################
 # PROJECT RULES                                                                 #
 #################################################################################
