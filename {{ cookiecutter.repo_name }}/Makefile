@@ -1,4 +1,4 @@
-.PHONY: clean data lint requirements update_requirements environment
+.PHONY: requirements data lint environment clean_environment clean test dev_requirements
 
 #################################################################################
 # GLOBALS                                                                       #
@@ -15,7 +15,7 @@ PYTHON_VERSION = {{ cookiecutter.python_version }}
 #################################################################################
 
 # In case a command need args
-args = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
+#args = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
 
 # to use args
 # $(call args, <default_value>)
@@ -24,12 +24,11 @@ args = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
 requirements:
 	source ./venv/bin/activate
 	$(PYTHON_INTERPRETER) -m pip install --no-cache-dir -U pip setuptools wheel build
-	$(PYTHON_INTERPRETER) -m pip install --no-cache-dir -r requirements.txt
-
-## Update Python Dependencies
-update_requirements: requirements
-	source ./venv/bin/activate
 	$(PYTHON_INTERPRETER) -m pip install --no-cache-dir -U -r requirements.txt
+
+## Install dependencies for development
+dev_requirements:
+	pip install -e .[testing]
 
 ## Make Dataset
 data: requirements
@@ -42,7 +41,12 @@ clean:
 
 ## Lint using flake8
 lint:
-	flake8 src test
+	flake8 src test; \
+	mypy src test
+
+## Test using pytest
+test:
+	pytest -v
 
 ## Create python virtual environment
 environment:
