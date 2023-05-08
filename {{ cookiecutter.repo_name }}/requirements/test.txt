@@ -1,0 +1,10 @@
+black
+coverage
+flake8
+mock
+pydocstyle
+pytest
+pytest-cov
+tox
+undecorated
+pytest-dependency

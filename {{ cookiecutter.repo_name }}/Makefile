@@ -1,8 +1,6 @@
 .PHONY: requirements data lint environment clean_environment clean test dev_requirements
 
-#################################################################################
-# GLOBALS                                                                       #
-#################################################################################
+# _________________________ GLOBALS _________________________
 
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PROJECT_NAME = {{ cookiecutter.repo_name }}
@@ -10,76 +8,86 @@ PYTHON_INTERPRETER = {{ cookiecutter.python_interpreter }}
 PACKAGE_MANAGER = {{ cookiecutter.package_manager }}
 PYTHON_VERSION = {{ cookiecutter.python_version }}
 
-#################################################################################
-# COMMANDS                                                                      #
-#################################################################################
+# _________________________ COMMANDS _________________________
 
 # In case a command need args
-#args = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
+args = `arg="$(filter-out $@,$(MAKECMDGOALS))" && echo $${arg:-${1}}`
 
 # to use args
 # $(call args, <default_value>)
 
-## Install Python Dependencies
-requirements:
-	source ./venv/bin/activate
-	$(PYTHON_INTERPRETER) -m pip install --no-cache-dir -U pip setuptools wheel build
-	$(PYTHON_INTERPRETER) -m pip install --no-cache-dir -U -r requirements.txt
-
-## Install dependencies for development
-dev_requirements:
-	pip install -e .[testing]
-
-## Make Dataset
-data: requirements
-	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/processed
-
-## Delete all compiled Python files
-clean:
-	find . -type f -name "*.py[co]" -delete
-	find . -type d -name "__pycache__" -delete
-
-## Lint using flake8
-lint:
-	flake8 src test; \
-	mypy src test
-
-## Test using pytest
-test:
-	pytest -v
-
-## Create python virtual environment
+## Create python virtual environment.
+{%- if cookiecutter.package_manager == "pip" -%}
+## By default uses /usr/bin/python{{ cookiecutter.python_version }} as python dir, change python version by passing an argument e.g. `make create_env /usr/bin/python3.10`
+{% endif %}
 environment:
 ifneq (,$(wildcard ./venv))
 	@echo The virtual environment has been already created;
 else
 ifeq ($(PACKAGE_MANAGER),"conda")
 	@echo ">>> Detected conda, creating conda environment."
-	$(PACKAGE_MANAGER) create --name $(PROJECT_NAME) python=$(PYTHON_VERSION)
+	conda create --name $(PROJECT_NAME) python=$(PYTHON_VERSION)
 	@echo ">>> New conda env created. Activate with:\nsource activate $(PROJECT_NAME)"
 else
 	@echo Creating venv venv;
-	python$(PYTHON_VERSION) -m pip install virtualenv;
-	python$(PYTHON_VERSION) -m virtualenv venv;
+	$(PYTHON_INTERPRETER) -m pip install -U pip virtualenv;
+	$(PYTHON_INTERPRETER) -m virtualenv venv;
+
+	$(PYTHON_INTERPRETER) -m pip install --no-cache-dir -U pip setuptools wheel build virtualenv
+	$(PYTHON_INTERPRETER) -m virtualenv --python=$(call args, "/usr/bin/python{{ cookiecutter.python_version }}") venv
+endif
 endif
 
 ## Clean virtual environment
-clean_environment:
+environment_clean:
 ifneq (,$(wildcard ./venv))
 	deactivate || echo "Already venv deactivated";
-	rm -r venv;
+	rm -rf venv;
+	find . -type d -name "{{ cookiecutter.project_name }}.egg-info" -exec rm -rf {} \; || echo 'Already dirs';
+	rm -rf build/ || echo 'Already deleted build/';
 else
 	@echo It has been cleaned already
 endif
-#################################################################################
-# PROJECT RULES                                                                 #
-#################################################################################
+
+## Install Python Dependencies for development
+requirements:
+ifneq (,$(wildcard ./venv))
+	@bash -c "source ./venv/bin/activate"
+	$(PYTHON_INTERPRETER) -m pip install --no-cache-dir -U pip setuptools wheel build
+	$(PYTHON_INTERPRETER) -m pip install --no-cache-dir -U {%- if cookiecutter.project_kind == "data science" -%} -r requirements/core.txt {%- elif cookiecutter.project_kind == "python library" -%} -e .[build,test,dev] {% endif %}
+else
+	@echo The virtualenv must be created first. Please use "make create_env"
+endif
+
+{%- if cookiecutter.project_kind == "data science" -%}
+## Install dependencies for testing
+dev_requirements:
+	$(PYTHON_INTERPRETER) -m pip install --no-cache-dir -r requirements/test.txt
+
+## Make Dataset
+data: requirements
+	$(PYTHON_INTERPRETER) src/data/make_dataset.py data/raw data/processed
+{% endif %}
+
+## Lint using flake8
+lint:
+	python -m tox -p -e flake8,mypy
+
+## Test using pytest and coverage
+cov-test:
+	$(PYTHON_INTERPRETER) -m tox -e py311
+
+## Display coverage report
+report:
+	$(PYTHON_INTERPRETER) -m tox -e report
+
+## Delete all compiled Python files
+clean:
+	find . | grep -E "(/__pycache__$|\.pyc$|\.pyo$)" | xargs rm -rf || echo 'Already clean dirs'
+	$(PYTHON_INTERPRETER) -m tox -e clean
 
 
-
-#################################################################################
-# Self Documenting Commands                                                     #
-#################################################################################
+# _________________________ Self Documenting Commands _________________________
 
 .DEFAULT_GOAL := help
 

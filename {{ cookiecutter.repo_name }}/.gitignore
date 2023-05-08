@@ -8,6 +8,7 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
+venv/
 build/
 develop-eggs/
 dist/
@@ -77,6 +78,7 @@ target/
 
 # exclude data from source control by default
 /artifacts/data/
+/artifacts/models/
 
 # Mac OS-specific storage files
 .DS_Store
@@ -90,3 +92,8 @@ target/
 
 # pytest
 .pytest_cache
+
+# others
+.sagemaker-code-config
+.aws
+.hypothesis

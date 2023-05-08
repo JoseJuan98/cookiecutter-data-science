@@ -70,7 +70,7 @@ class TestCookieSetup(object):
             assert p == 'MIT'
 
     def test_requirements(self):
-        reqs_path = self.path / 'requirements.txt'
+        reqs_path = self.path / 'core.txt'
         assert reqs_path.exists()
         assert no_curlies(reqs_path)
         if pytest.param.get('python_interpreter'):

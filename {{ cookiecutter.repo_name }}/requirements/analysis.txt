@@ -1,0 +1,9 @@
+# notebooks
+ipykernel
+jupyterlab
+
+# Data Visualization
+matplotlib
+seaborn
+pandas-profiling    # generates a detailed EDA report with a few lines
+pandas[plot]

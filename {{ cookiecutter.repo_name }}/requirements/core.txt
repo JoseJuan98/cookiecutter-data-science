@@ -1,0 +1,24 @@
+# General
+tqdm
+pydantic
+
+# Scientific computing
+numpy
+scipy
+
+# Data Processing
+pyarrow
+pandas[performance,computation,hdf5,parquet]
+
+# ML/DL
+scikit-learn
+imblearn
+category-encoders
+
+# Data Validation
+pandera
+great-expectations
+
+# Object Serialization
+joblib
+onnx
