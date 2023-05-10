@@ -83,7 +83,8 @@ report:
 
 ## Delete all compiled Python files
 clean:
-	find . | grep -E "(/__pycache__$|\.pyc$|\.pyo$)" | xargs rm -rf || echo 'Already clean dirs'
+	#find . | grep -E "(/__pycache__$|\.pyc$|\.pyo$)" | xargs rm -rf || echo 'Already clean dirs'
+	find . | grep -E "(build$/__pycache__$|\.pyc$|\.pyo$|\.egg-info$)" | xargs rm -rf || echo 'Already clean'
 	$(PYTHON_INTERPRETER) -m tox -e clean
 
 
