@@ -7,3 +7,6 @@ matplotlib
 seaborn
 pandas-profiling    # generates a detailed EDA report with a few lines
 pandas[plot]
+
+# Interpreation
+pydotplus    # help visualize the graph a Decision Tree from sklearn
