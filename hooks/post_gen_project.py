@@ -8,7 +8,6 @@ path = Path(os.getcwd())
 
 # Source path
 parent_path = os.path.join(path.parent.absolute(), "{{ cookiecutter.repo_name }}")
-src_path = os.path.join(parent_path, "src")
 
 
 def remove(filepath):
@@ -20,9 +19,7 @@ def remove(filepath):
 
 if "{{cookiecutter.project_kind}}" == "python library":
     # User does not want folder so remove it
-    for folder in os.listdir(src_path):
-        if folder not in ["{{ cookiecutter.project_name }}", "__init__.py", "py.typed"]:
-            remove(os.path.join(src_path, folder))
+    remove(os.path.join(parent_path, "pipeline"))
 
     for file in ["test.txt", "analysis.txt"]:
         remove(os.path.join(parent_path, "requirements", file))
@@ -31,6 +28,5 @@ if "{{cookiecutter.project_kind}}" == "python library":
         remove(os.path.join(parent_path, folder))
 
 else:
-    remove(os.path.join(src_path, "{{ cookiecutter.project_name }}"))
-    remove(os.path.join(src_path, "py.typed"))
-    remove(os.path.join(parent_path, "setup.py"))
+    for folder in ["src", "setup.py"]:
+        remove(os.path.join(parent_path, folder))
