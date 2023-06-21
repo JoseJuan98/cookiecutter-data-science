@@ -192,10 +192,9 @@ OTHER_VARIABLE=something
 
 #### Use a package to load these variables automatically.
 
-If you look at the stub script in `src/data/make_dataset.py`, it uses a package called [python-dotenv](https://github.com/theskumar/python-dotenv) to load up all the entries in this file as environment variables so they are accessible with `os.environ.get`. Here's an example snippet adapted from the `python-dotenv` documentation:
+If you look at the stub script in `pipeline/data/make_dataset.py`, it uses a package called [python-dotenv](https://github.com/theskumar/python-dotenv) to load up all the entries in this file as environment variables so they are accessible with `os.environ.get`. Here's an example snippet adapted from the `python-dotenv` documentation:
 
 ```python
-# src/data/dotenv_example.py
 import os
 from dotenv import load_dotenv, find_dotenv
 

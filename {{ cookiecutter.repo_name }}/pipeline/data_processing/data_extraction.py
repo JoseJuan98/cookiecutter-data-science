@@ -21,6 +21,8 @@ from urllib.request import urlretrieve
 # Data Analysis
 import pandas
 
+from pipeline.paths import DATA_PATH
+
 # Utils
 logger = logging.getLogger('main')
 logger.addHandler(logging.StreamHandler())
