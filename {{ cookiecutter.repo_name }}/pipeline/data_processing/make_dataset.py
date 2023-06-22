@@ -1,14 +1,18 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# __________________________________________
-#
-# Version: 2.0
-# Author: Jose Pena
-# Date: X/2023
-#
-# __________________________________________
-#
-"""Script to create a dataset """
+"""
+Date: 6/2023
+Version: 1.0
+Author: (I) Jose Pena
+Website: https://github.com/JoseJuan98
+
+
+Make Dataset
+============
+
+Script to create a dataset
+
+"""
+
 import click
 import logging
 from pathlib import Path

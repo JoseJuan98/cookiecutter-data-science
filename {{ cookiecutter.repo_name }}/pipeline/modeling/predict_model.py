@@ -1,11 +1,13 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-# __________________________________________
-#
-# Version: 2.0
-# Author: Jose Pena
-# Date: X/2023
-#
-# __________________________________________
-#
-"""Deep Neural Network """
+"""
+Date: 6/2023
+Version: 1.0
+Author: (I) Jose Pena
+Website: https://github.com/JoseJuan98
+
+
+Title ...
+==============
+
+...
+"""
