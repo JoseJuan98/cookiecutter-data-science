@@ -6,8 +6,8 @@ Author: (I) Jose Pena
 Website: https://github.com/JoseJuan98
 
 
-Data Gathering
-==============
+Data Extraction
+===============
 
 ...
 """
@@ -21,21 +21,18 @@ from urllib.request import urlretrieve
 # Data Analysis
 import pandas
 
-from pipeline.paths import DATA_PATH
+from pipeline.paths import DATASET_PATH, DOWNLOAD_URI
 
 # Utils
-logger = logging.getLogger("main")
+logger = logging.getLogger('main')
 logger.addHandler(logging.StreamHandler())
 
-DOWNLOAD_ROOT = "https://"  # TODO
 
-DATASET_PATH = os.path.join(DATA_PATH, "raw", ".csv")  # TODO
-PREPARED_DATA = os.path.join(DATA_PATH, "processed", 'processed.csv')  # TODO
-
-
-def fetch_housing_data(url: Union[str, Path],
-                       path: Union[str, Path],
-                       force_retrieve: bool = False) -> pandas.DataFrame:
+def fetch_data(
+        url: Union[str, Path] = DOWNLOAD_URI,
+        path: Union[str, Path] = DATASET_PATH,
+        force_retrieve: bool = False
+) -> pandas.DataFrame:
     """
     Method to extract the data from a URL and stores it in a file into the `path` or if the file already exists in
     the `path` skips the extraction. Finally, returns a dataframe reading this file. Args: url (str, Path): URL to
@@ -46,10 +43,7 @@ def fetch_housing_data(url: Union[str, Path],
     Returns:
         DataFrame: data extracted from path or URL
     """
-    if not os.path.exists(DATASET_PATH) or force_retrieve:
-        if DOWNLOAD_ROOT == "https://":
-            raise Exception("Specify `DOWNLOAD_ROOT` in pipeline/data_processing/data_extraction.py")
-
+    if not os.path.exists(path) or force_retrieve:
         dir_path = os.path.dirname(path)
 
         if not os.path.isdir(dir_path):
