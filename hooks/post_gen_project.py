@@ -27,6 +27,12 @@ if "{{cookiecutter.project_kind}}" == "python library":
     for folder in ["artifacts", "notebooks", "reports"]:
         remove(os.path.join(parent_path, folder))
 
+    remove(os.path.join(parent_path, "src", "{{ cookiecutter.project_name }}", "visualization"))
+    remove(os.path.join(parent_path, "src", "paths.py"))
+
 else:
-    for folder in ["src", "setup.py"]:
-        remove(os.path.join(parent_path, folder))
+    # Rename the folder to common
+    os.rename(
+        os.path.join(parent_path, "{{ cookiecutter.project_name }}"),
+        os.path.join(parent_path, "common"),
+    )

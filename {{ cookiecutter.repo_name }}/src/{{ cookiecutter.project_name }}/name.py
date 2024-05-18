@@ -14,7 +14,7 @@ Constants
 from enum import StrEnum
 
 
-class DataVar(StrEnum):
+class VarName(StrEnum):
     """
     Names of data variables
     """
