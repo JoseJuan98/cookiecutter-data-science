@@ -1,0 +1,70 @@
+# Scientific Python Stack
+numpy
+scipy
+
+
+# Visualization
+matplotlib
+seaborn
+bokeh
+plotly
+
+
+# Data processing
+pyarrow
+pandas[performance,computation,hdf5,parquet]
+pyspark
+dask
+
+
+# Machine learning
+scikit-learn
+imblearn
+category-encoders
+mxnet
+
+# Deep Learning
+tensorflow
+keras
+pytorch
+
+# GPU acceleration
+cupy
+numba
+cuDF
+cuDNN
+
+# Statistical computing
+statsmodels
+numpyro
+pyro
+pymc
+tensorflow-probability
+
+# Data Validation
+pandera
+great-expectations
+
+# Object Serialization
+joblib
+onnx
+
+# lib with DataClasses to enforce defined structures in classes
+pydantic
+
+# Mix Marketing Modeling
+pymc-marketing
+lighweight-mmm
+
+# Others
+tqdm
+
+# Web Scrappers
+Selenium
+Scrapy
+BeatifulSoup
+
+# Mathematical Optimization
+pyomo
+ortools
+sympy

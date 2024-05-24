@@ -1,0 +1,6 @@
+twine
+setuptools
+wheel
+build
+mkdocs
+sphinx
