@@ -109,4 +109,4 @@ We welcome contributions! [See the docs for guidelines](https://drivendata.githu
 ### Running the tests
 ------------
 
-    py.test tests
+    pytest tests
